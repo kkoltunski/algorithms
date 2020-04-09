@@ -48,7 +48,7 @@ int main(){
 		cout << "qsVec[" << i << "] = " << qsVec[i] << endl;
 	}
 	
-	quickSort<float>(qsVec.begin(), qsVec.end());
+	quickSort<float>(qsVec.begin(), qsVec.end(),1);
 	
 	for(int i = 0; i < 20; ++i){
 		cout << "qsVec[" << i << "] = " << qsVec[i] << endl;
@@ -59,7 +59,7 @@ int main(){
 	vector<int> bstVec;
 	
 	for(int i = 0; i < 10; ++i){
-		bstVec.push_back(randomVal(15));
+		bstVec.push_back(rangedRandomValue(15));
 		cout << "bstVec[" << i << "] = " << bstVec[i] << endl;
 	}
 	
@@ -70,13 +70,13 @@ int main(){
 //////////////////////////////////Thue Mors Word//////////////////////////////
 	//String part
 	cout << "\nTHUE MORS WORD\nString operation\n";
-	ThueMorsWord<string> TMWstring;
+	ThueMorsWord<string> TMword;
 	
 	for(long i = 0; i < 3; ++i){
-		TMWstring.iterate();
+		TMword.iterate();
 	}
 	
-	TMWstring.showDigit();
+	TMword.showDigit();
 	
 //binary part
 	cout << "\n\nBinary operation\n";
@@ -84,19 +84,19 @@ int main(){
 	
 	cout << "Val after iteration : ";
 	TMWlli.iterate();
-	ThueMorsWord<long long int>::binary(TMWlli.showVal());
+	ThueMorsWord<long long int>::binary(TMWlli.showChain());
 	cout << "\nVal after iteration : ";
 	TMWlli.iterate();
-	ThueMorsWord<long long int>::binary(TMWlli.showVal());
+	ThueMorsWord<long long int>::binary(TMWlli.showChain());
 	cout << "\nVal after iteration : ";
 	TMWlli.iterate();
-	ThueMorsWord<long long int>::binary(TMWlli.showVal());
+	ThueMorsWord<long long int>::binary(TMWlli.showChain());
 	cout << "\nVal after iteration : ";
 	TMWlli.iterate();
-	ThueMorsWord<long long int>::binary(TMWlli.showVal());
+	ThueMorsWord<long long int>::binary(TMWlli.showChain());
 	cout << "\nVal after iteration : ";
 	TMWlli.iterate();
-	ThueMorsWord<long long int>::binary(TMWlli.showVal());
+	ThueMorsWord<long long int>::binary(TMWlli.showChain());
 	
 	cout << endl << "On pos = 0 there is digit = " << TMWlli[0];
 	cout << endl << "On pos = 1 there is digit = " << TMWlli[1];
@@ -108,6 +108,6 @@ int main(){
 	cout << endl << "On pos = 7 there is digit = " << TMWlli[7];
 	cout << endl << "On pos = 1000000000000000 there is digit = " << TMWlli[1000000000000000] << endl;
 //////////////////////////////////////////////////////////////////////////////
-
+	
 	return 0;
 }

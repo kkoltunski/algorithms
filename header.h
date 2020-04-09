@@ -17,6 +17,6 @@ using std::string;
 using std::vector;
 
 //Generate "random" value in range - maybe better if function will be in "sort.h" ?
-int randomVal(int _upRange, int _botRange = 0){
+int rangedRandomValue(int _upRange, int _botRange = 0){
 	return _botRange + int((_upRange-_botRange+1) * rand()/(RAND_MAX+1.0));	
 }

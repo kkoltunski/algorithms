@@ -14,7 +14,7 @@ class ThueMorsWord
 {	
 		int firstDigit;
 		ChainType chain;
-		int iterated = 1;
+		int nextShift = 1;
 		
 		ChainType removeMinus(ChainType &val){							//bit negation - because value is "-" after iterate()
 			ChainType abs = ~val;										//i dont know why in iterate() it doesnt work...
@@ -27,14 +27,14 @@ class ThueMorsWord
 			chain = chain << 1;
 		}
 
-		ChainType showVal(){							
+		ChainType showChain(){							
 			return removeMinus(chain);
 		}
 		void iterate(){													//add negated chain of bits to actual chain
 			ChainType temp = ~chain;
-			chain <<= iterated;
+			chain <<= nextShift;
 			chain = (chain | temp);
-			iterated <<= 1;
+			nextShift <<= 1;
 		}
 		static void binary(ChainType val);
 		
@@ -42,32 +42,30 @@ class ThueMorsWord
 };
 
 template<typename ChainType>											//conversion to binnary 
-void ThueMorsWord<ChainType>::binary(ChainType val){
-	static string res;
-	ChainType temp = val;	
-	if(temp > 1) binary(temp >> 1);
-	cout << temp % 2;
+void ThueMorsWord<ChainType>::binary(ChainType _val){
+	if(_val > 1) binary(_val >> 1);
+	cout << _val % 2;
 }
 
 template<typename ChainType>
-char ThueMorsWord<ChainType>::operator[](long long int _pos){
+char ThueMorsWord<ChainType>::operator[](long long int _posToCheck){
 	/*ChainType tempOrg = (removeMinus(chain) >> (_pos));	//checking on real bits
 	ChainType tempCpy = ((tempOrg >> 1) << 1);
 	return (tempCpy < tempOrg ? 'Y' : 'X');*/
 	
-	string binRes{""};													//Thuego-Morse’a algorithm
-	int oneCt {};
+	string binaryResult{""};											//Thue-Morse algorithm
+	int onesCounter {};
 	
-	while(_pos > 0){
-		binRes += std::to_string(_pos % 2);
-		_pos >>= 1;
+	while(_posToCheck > 0){
+		binaryResult += std::to_string(_posToCheck % 2);
+		_posToCheck >>= 1;
 	}
 	
-	for(auto x : binRes){
-		(x == '1' ? oneCt++ : oneCt = oneCt);
+	for(auto bit : binaryResult){
+		(bit == '1' ? onesCounter++ : onesCounter = onesCounter);
 	}
 	
-	return (oneCt % 2 ? 'Y' : 'X');
+	return (onesCounter % 2 ? 'Y' : 'X');
 }
 
 template<>																//template specialization for string

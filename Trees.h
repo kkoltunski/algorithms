@@ -34,19 +34,17 @@ std::ostream& operator<<(std::ostream &_outStream, node<T>& _inNode){
 (node where this node come from) and this node sons (up to 2 sons)*/
 template<typename T>
 class node{													
-	private:
-		using tP = node*;
-		
+	private:	
 		node *pToFather;
 		node *pToLeftSon;
 		node *pToRightSon;
 		T data;
 	
-		node<T>()	: pToFather(nullptr), pToLeftSon{nullptr}, pToRightSon{nullptr}, data{0}
+		node<T>() : pToFather(nullptr), pToLeftSon{nullptr}, pToRightSon{nullptr}, data{0}
 		{
 		};
-		node<T>(tP _ptf, tP _ptls, tP _ptrs, T _d) :   pToFather(_ptf), pToLeftSon{_ptls}, pToRightSon{_ptrs},
-												   data{_d}
+		node<T>(node *_ptf, node *_ptls, node *_ptrs, T _d) :   pToFather(_ptf), pToLeftSon{_ptls}, pToRightSon{_ptrs},
+												   				data{_d}
 		{
 		};
 	
@@ -55,10 +53,6 @@ class node{
 	friend class BST<T>;
 	friend std::ostream& operator<<<>(std::ostream &_outStream, node<T>& _inNode);
 };
-
-//template<typename T>
-//node<T>::~node<T>(){
-//}
 
 template<typename T>
 node<T>& node<T>::swapNodes(node<T> &_in){
@@ -107,7 +101,7 @@ class BST{
 		node<T> *rootAdr;											//because of balancing operation this value is not constatn - it will be changing while rotations	
 		vector<node<T>*> createdNodes;
 		
-		virtual bool findDuplicate(T _inVal);						//f. to searching for duplicate datas (duplicates should not be added to tree again)
+		virtual bool isExisting(T _inVal);							//f. to searching for duplicate datas (duplicates should not be added to tree again)
 		virtual node<T>& rotation(node<T> *_pivotAdr);				//f. to recognize which kind of rotation is able to be done
 		virtual void balancing();									//f. to balance nodes (after this call nodes are sorted) - second part of DSW algorithm
 		
@@ -117,36 +111,36 @@ template<typename T>
 BST<T>::BST(const vector<T> &_inVec){
 	if(!_inVec.empty()){
 		auto *rootNode = new node<T>;
-		rootAdr = rootNode;											//first initialization of pToRoot is necessary to next operation
+		rootAdr = rootNode;											//first initialization of rootAdr is necessary to next operation
 		
 		rootNode->pToFather = nullptr;								//creating root node (it is always index 0)
 		rootNode->data = _inVec[0];									//which data is equal first element of delivered vector
 		createdNodes.push_back(rootNode);							//root node on tree vector [0] index
 		
 		for(int k = 1; k < _inVec.size(); ++k){						//DSW first step - create line list in right path of tree					
-			if(findDuplicate(_inVec[k])) continue;					//avoid doubled elements value
+			if(isExisting(_inVec[k])) continue;						//avoid doubled elements
 			
 			auto *tempNode = new node<T>();
-			node<T> *pToNode = rootAdr;								//route should be checked always from root node
-			int newIndex = 0;
+			node<T> *pToNode = rootAdr;								//path should be checked always from root node
+			int rightOrLeftSon = 0;
 			
-			while(!newIndex){										//find index of new node		
+			while(!rightOrLeftSon){									//find index of new node		
 				if(_inVec[k] > pToNode->data){						//if value is larger than root go to right son
-					if(pToNode->pToRightSon == nullptr)	newIndex = 2;//if father has not right son then index is found	
+					if(pToNode->pToRightSon == nullptr)	rightOrLeftSon = 2;//if father has not right son then index is found	
 					else pToNode = pToNode->pToRightSon;			//if father has right son then next father to check is this son
 				}
 				else{												//if value is smaller than root go to left son
-					if(pToNode->pToLeftSon == nullptr) newIndex = 1;//if father has not left son then position is found
+					if(pToNode->pToLeftSon == nullptr) rightOrLeftSon = 1;//if father has not left son then position is found
 					else pToNode = pToNode->pToLeftSon;				//if father has left son then next father to check is this son
 				}
 			}		
 			
 			tempNode->pToFather = pToNode;							//make connection between son and dad
 			tempNode->data = _inVec[k];
-			(!(newIndex % 2) ? pToNode->pToRightSon : pToNode->pToLeftSon ) = tempNode;
+			(!(rightOrLeftSon % 2) ? pToNode->pToRightSon : pToNode->pToLeftSon ) = tempNode;
 			createdNodes.push_back(tempNode);
 		
-			if(newIndex % 2) rotation(tempNode);					//if new node is added on root left side then rotate this (purpose - when loop will be finished we will have line list ready for step II of DSW)
+			if(rightOrLeftSon % 2) rotation(tempNode);				//if new node is added on root left side then rotate this (purpose - when loop will be finished we will have line list ready for step II of DSW)
 		}
 //		for(int i = 0; i < createdNodes.size(); ++i){				//nodes diagnostic to check results 
 //			cout << *createdNodes[i];
@@ -165,7 +159,7 @@ BST<T>::~BST<T>(){
 }
 
 template<typename T>
-bool BST<T>::findDuplicate(T _inVal){										//simple function to define if value has duplicate in vector
+bool BST<T>::isExisting(T _inVal){									//simple function to define if value has duplicate in vector
 	bool duplicateFound {false};
 	
 	for(int i = 0; i < createdNodes.size(); ++i){					//just check given vector 
@@ -217,7 +211,7 @@ void BST<T>::balancing(){											//!!!!maybe will be necessary to add checkin
 		while(ct != 0){
 			for(int i = 0; i < (ct / 2); ++i){						//first cycle - rotate every second node 
 				rotation(pivot);
-				for(int x = 0; x < 2; ++x, pivot = pivot->pToRightSon){	//move to the grandson
+				for(int x = 0; x < 2; ++x, pivot = pivot->pToRightSon){//move to the grandson
 					if(pivot->pToRightSon == nullptr) break;
 				}
 			}

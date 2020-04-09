@@ -4,18 +4,18 @@ using std::endl;
 using std::string;
 using std::vector;
 
-template <typename Base, typename Index>		//Function for power 
-Base pow(Base _base, Index _idx){
-	Base temp {1};
+template <typename Base, typename Index>					//Function for power 
+Base pow(Base _base, Index _index){
+	Base result {1};
 	
-	if(_idx == 0) return temp;
+	if(_index == 0) return result;
 	else{
-		for(int i = 0; i < _idx; ++i){
-		temp *= _base;
+		for(int i = 0; i < _index; ++i){
+		result *= _base;
 		}
 	}
 
-	return temp;
+	return result;
 }
 
 //DEC -> x
@@ -76,17 +76,17 @@ int hexToDec(unsigned int _val){
 	int scale, digit, result {};
 	string sVal;
 												
-	sstream << std::hex << _val;				//put hex value into sstream
+	sstream << std::hex << _val;							//put hex value into sstream
 	sVal = sstream.str();
 											
-	scale = (sVal.size() - 1);					//Prepare data for code after recur. finish
+	scale = (sVal.size() - 1);								//Prepare data for code after recur. finish
 	digit = (sVal.front() - ((sVal.front() > 96) ? 87 : 48));
 	sVal = "0x" + sVal.erase(0,1);
 												
-	sstream.str(std::string(sVal));				//Prepare value for next f.call
+	sstream.str(std::string(sVal));							//Prepare value for next f.call
 	sstream >> std::hex >> _val;
 												
-	if(sVal.size() > 2) result = hexToDec(_val);//recurension + result handshake
+	if(sVal.size() > 2) result = hexToDec(_val);			//recurension + result handshake
 	
 	result += digit * pow<int,int>(16,scale);
 	return result;
