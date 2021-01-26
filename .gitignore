@@ -1,6 +1,5 @@
 #Ignore files#
 *.o
-*.out
 *.layout
 *.win
 *.gch
