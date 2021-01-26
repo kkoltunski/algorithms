@@ -4,3 +4,10 @@
 *.layout
 *.win
 *.gch
+
+.vs
+*.sln
+*.filters
+*.user
+Debug
+Release
